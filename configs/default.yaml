@@ -21,19 +21,19 @@ policy:
   hidden_dim: 256
   n_actions: 5           # LANE_LEFT, IDLE, LANE_RIGHT, FASTER, SLOWER
 
-# ── Training (single-λ REINFORCE) ─────────────────────────────────────────────
+# ── Training (single-λ A2C) ───────────────────────────────────────────────────
 train:
   n_episodes: 500
   gamma: 0.99            # discount factor
   learning_rate: 3.0e-4
-  baseline_momentum: 0.05  # EMA coefficient for running return baseline
+  critic_lr: 1.0e-3      # critic learns faster than policy (standard A2C practice)
   log_interval: 20       # print stats every N episodes
   save_interval: 100     # save checkpoint every N episodes
 
 # ── PSL training (Phase 3) ───────────────────────────────────────────────────
 psl:
   n_pref_samples: 8      # preference vectors per update batch (K)
-  n_episodes_per_pref: 3 # episodes to estimate each objective gradient
+  n_episodes_per_pref: 15 # episodes per λ for gradient estimation (min 10–20; 3 is too noisy)
   solver: epo            # LibMOON solver: epo | ls | cosmos
 
 # ── Evaluation ───────────────────────────────────────────────────────────────
